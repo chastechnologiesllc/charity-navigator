@@ -9,6 +9,8 @@ export function ListCard({
   list: CharityList;
   className?: string;
 }) {
+  const photos = list.photos?.length ? list.photos : [list.photo];
+
   return (
     <Link
       to="/lists/$slug"
@@ -18,12 +20,23 @@ export function ListCard({
         className,
       )}
     >
-      <div className="relative aspect-16/9 overflow-hidden">
-        <img
-          src={list.photo}
-          alt=""
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-        />
+      <div
+        className={cn(
+          "relative grid aspect-16/9 overflow-hidden",
+          photos.length > 1 ? "grid-cols-3 grid-rows-2" : "grid-cols-1",
+        )}
+      >
+        {photos.map((photo, index) => (
+          <img
+            key={photo}
+            src={photo}
+            alt=""
+            className={cn(
+              "h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]",
+              photos.length > 1 && index === 0 && "row-span-2",
+            )}
+          />
+        ))}
         <span className="absolute left-3 top-3 rounded-sm bg-navy/90 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-paper">
           {list.kicker}
         </span>

@@ -58,6 +58,7 @@ export type CharityList = {
   kicker: string;
   description: string;
   photo: string;
+  photos?: string[];
   kind: "crisis" | "fund" | "theme";
   charitySlugs: string[];
 };

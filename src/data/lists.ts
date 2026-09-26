@@ -105,6 +105,13 @@ export const LISTS: CharityList[] = [
     description:
       "A starting point for anyone in the United States experiencing homelessness, housing instability, hunger, or another urgent hardship. These organizations connect people with shelter, housing support, food, and practical assistance regardless of race or background.",
     photo: "/images/homeless-support.jpg",
+    photos: [
+      "/images/homeless-support.jpg",
+      "/images/homeless-support-2.jpg",
+      "/images/homeless-support-3.jpg",
+      "/images/homeless-support-4.jpg",
+      "/images/homeless-support-5.jpg",
+    ],
     kind: "crisis",
     charitySlugs: [
       "salvation-army",
