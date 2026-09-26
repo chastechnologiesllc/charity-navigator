@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { verifyFlutterwavePayment } from "@/lib/flutterwave.server";
 
-export const Route = createFileRoute("/payment/flutterwave/callback")({
+export const Route = createFileRoute("/api/flutterwave/callback")({
   server: {
     handlers: {
       GET: async ({ request }) => {

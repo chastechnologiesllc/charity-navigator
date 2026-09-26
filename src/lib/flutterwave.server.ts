@@ -67,7 +67,7 @@ export async function createFlutterwavePayment(data: CheckoutInput): Promise<Pay
       tx_ref: reference,
       amount: amount.toFixed(2),
       currency: PAYMENT_CURRENCY,
-      redirect_url: `${appUrl()}/payment/flutterwave/callback`,
+      redirect_url: `${appUrl()}/api/flutterwave/callback`,
       payment_options: "card",
       customer: { email: data.customer.email.trim().toLowerCase(), name: data.customer.name.trim() || "Supporter" },
       customizations: { title: "Charity Navigator", description: "USD card donation", logo: `${appUrl()}/images/logo-mark.svg` },
