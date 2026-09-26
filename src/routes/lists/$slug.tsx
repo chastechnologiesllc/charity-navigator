@@ -50,6 +50,18 @@ function ListDetailPage() {
           </div>
         </div>
       </section>
+      {charities[0] ? (
+        <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 sm:pt-14">
+          <div className="flex flex-col gap-5 rounded-2xl bg-navy p-6 text-paper sm:flex-row sm:items-center sm:justify-between sm:p-8">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-fg">Ready to help today?</p>
+              <h2 className="mt-2 font-display text-3xl font-semibold">Turn compassion into action.</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-paper/75">Choose a trusted organization below and build a USD card donation in your Giving Basket.</p>
+            </div>
+            <Link to="/charity/$slug" params={{ slug: charities[0].slug }} className="inline-flex h-11 shrink-0 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-fg hover:bg-primary-hover">Donate now</Link>
+          </div>
+        </section>
+      ) : null}
       {photos.length > 5 ? (
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">Ad preview image set</p>
