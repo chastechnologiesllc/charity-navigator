@@ -99,6 +99,22 @@ export const LISTS: CharityList[] = [
     ],
   },
   {
+    slug: "homeless-basic-needs-help",
+    title: "U.S. Homelessness & Basic Needs Help",
+    kicker: "Get Help Now",
+    description:
+      "A starting point for anyone in the United States experiencing homelessness, housing instability, hunger, or another urgent hardship. These organizations connect people with shelter, housing support, food, and practical assistance regardless of race or background.",
+    photo: "/images/housing.jpg",
+    kind: "crisis",
+    charitySlugs: [
+      "salvation-army",
+      "covenant-house",
+      "habitat-for-humanity",
+      "feeding-america",
+      "american-red-cross",
+    ],
+  },
+  {
     slug: "highly-rated",
     title: "Charities with Perfect and Near-Perfect Scores",
     kicker: "Best Charities",
