@@ -104,7 +104,7 @@ export const LISTS: CharityList[] = [
     kicker: "Get Help Now",
     description:
       "A starting point for anyone in the United States experiencing homelessness, housing instability, hunger, or another urgent hardship. These organizations connect people with shelter, housing support, food, and practical assistance regardless of race or background.",
-    photo: "/images/housing.jpg",
+    photo: "/images/homeless-support.jpg",
     kind: "crisis",
     charitySlugs: [
       "salvation-army",
