@@ -38,7 +38,7 @@ function ListDetailPage() {
               <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{list.description}</p>
             </div>
             <div className="grid aspect-16/9 grid-cols-3 grid-rows-2 overflow-hidden rounded-xl shadow-[var(--shadow-lift)]">
-              {photos.map((photo, index) => (
+              {photos.slice(0, 5).map((photo, index) => (
                 <img
                   key={photo}
                   src={photo}
@@ -50,6 +50,17 @@ function ListDetailPage() {
           </div>
         </div>
       </section>
+      {photos.length > 5 ? (
+        <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Ad preview image set</p>
+          <h2 className="mt-1 font-display text-3xl font-semibold text-navy">More moments of support</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {photos.slice(5).map((photo) => (
+              <img key={photo} src={photo} alt="Community support and outreach" className="aspect-4/3 w-full rounded-xl object-cover" />
+            ))}
+          </div>
+        </section>
+      ) : null}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="mb-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">Featured organizations</p>

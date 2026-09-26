@@ -111,6 +111,11 @@ export const LISTS: CharityList[] = [
       "/images/homeless-support-3.jpg",
       "/images/homeless-support-4.jpg",
       "/images/homeless-support-5.jpg",
+      "/images/homeless-support-6.jpg",
+      "/images/homeless-support-7.jpg",
+      "/images/homeless-support-8.jpg",
+      "/images/homeless-support-9.jpg",
+      "/images/homeless-support-10.jpg",
     ],
     kind: "crisis",
     charitySlugs: [

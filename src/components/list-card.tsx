@@ -9,7 +9,7 @@ export function ListCard({
   list: CharityList;
   className?: string;
 }) {
-  const photos = list.photos?.length ? list.photos : [list.photo];
+  const photos = (list.photos?.length ? list.photos : [list.photo]).slice(0, 5);
 
   return (
     <Link
