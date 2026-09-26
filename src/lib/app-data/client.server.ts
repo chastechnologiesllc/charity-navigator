@@ -278,7 +278,9 @@ function tokenIdentityKey(token: string): string {
             .digest("base64url");
         }
       }
-    } catch {}
+    } catch {
+      // Malformed optional claims are treated as an anonymous token.
+    }
   }
   return createHash("sha256").update(token).digest("base64url");
 }

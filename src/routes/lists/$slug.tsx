@@ -1,0 +1,64 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { CharityCard } from "@/components/charity-card";
+import { getList, listCharities } from "@/data/lists";
+
+export const Route = createFileRoute("/lists/$slug")({ component: ListDetailPage });
+
+function ListDetailPage() {
+  const { slug } = Route.useParams();
+  const list = getList(slug);
+
+  if (!list) {
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
+        <p className="text-sm font-semibold uppercase tracking-wider text-primary">404</p>
+        <h1 className="mt-2 font-display text-4xl font-semibold text-navy">List not found</h1>
+        <Link to="/discover" className="mt-6 inline-flex h-11 items-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-fg">
+          Browse curated lists
+        </Link>
+      </main>
+    );
+  }
+
+  const charities = listCharities(list);
+  const photos = list.photos?.length ? list.photos : [list.photo];
+
+  return (
+    <main>
+      <section className="border-b border-line bg-canvas">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+          <Link to="/discover" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+            <ArrowLeft size={15} /> Back to curated lists
+          </Link>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{list.kicker}</p>
+              <h1 className="mt-3 font-display text-4xl font-semibold text-navy sm:text-5xl">{list.title}</h1>
+              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{list.description}</p>
+            </div>
+            <div className="grid aspect-16/9 grid-cols-3 grid-rows-2 overflow-hidden rounded-xl shadow-[var(--shadow-lift)]">
+              {photos.map((photo, index) => (
+                <img
+                  key={photo}
+                  src={photo}
+                  alt=""
+                  className={`h-full w-full object-cover ${index === 0 ? "row-span-2" : ""}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Featured organizations</p>
+          <h2 className="mt-1 font-display text-3xl font-semibold text-navy">Where support can start</h2>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {charities.map((charity) => <CharityCard key={charity.slug} charity={charity} />)}
+        </div>
+      </section>
+    </main>
+  );
+}
