@@ -114,7 +114,7 @@ export function DonateDialog({
             onClick={() => submit(true)}
             className="h-11 rounded-md bg-primary text-sm font-semibold text-primary-fg hover:bg-primary-hover disabled:opacity-50"
           >
-            Add {formatUsd(value)} to basket
+            Add {formatUsd(value, 2)} to basket
           </button>
           <button
             type="button"
