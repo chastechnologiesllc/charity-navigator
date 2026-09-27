@@ -455,7 +455,21 @@ export async function authorizeFlutterwavePayment(
           }
         : authorization.type === "otp"
           ? { type: "otp", otp: { code: authorization.code } }
-          : { type: "avs", avs: { address: authorization.address } };
+          : {
+              type: "avs",
+              avs: {
+                address: {
+                  line1: authorization.address.line1.trim(),
+                  ...(authorization.address.line2.trim()
+                    ? { line2: authorization.address.line2.trim() }
+                    : {}),
+                  city: authorization.address.city.trim(),
+                  state: authorization.address.state.trim(),
+                  postal_code: authorization.address.postal_code.trim(),
+                  country: authorization.address.country.trim().toUpperCase(),
+                },
+              },
+            };
     const response = await v4Request<V4Charge>(
       `/charges/${encodeURIComponent(intent.flutterwave_charge_id)}`,
       {
