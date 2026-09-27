@@ -49,13 +49,19 @@ function ListDetailPage() {
                 {list.description}
               </p>
             </div>
-            <div className="grid aspect-16/9 grid-cols-3 grid-rows-2 overflow-hidden rounded-xl shadow-[var(--shadow-lift)]">
+            <div
+              className={`grid aspect-16/9 overflow-hidden rounded-xl shadow-[var(--shadow-lift)] ${
+                photos.length > 1 ? "grid-cols-3 grid-rows-2" : "grid-cols-1"
+              }`}
+            >
               {photos.slice(0, 5).map((photo, index) => (
                 <img
                   key={photo}
                   src={photo}
                   alt=""
-                  className={`h-full w-full object-cover ${index === 0 ? "row-span-2" : ""}`}
+                  className={`h-full w-full object-cover ${
+                    photos.length > 1 && index === 0 ? "row-span-2" : ""
+                  }`}
                 />
               ))}
             </div>
