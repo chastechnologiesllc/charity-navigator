@@ -42,6 +42,10 @@ function sendHtml(res, html) {
   res.end(body);
 }
 
+function includeGrokExtensions(pathname) {
+  return !/^\/(?:basket|payment-result)(?:\/|$)/.test(pathname);
+}
+
 function serveGrokPwa(middlewares) {
   middlewares.use((req, res, next) => {
     const rawUrl = req.url ?? "";
@@ -105,6 +109,7 @@ function wrapHtmlResponses(middlewares, cwd) {
     const injector = createHeadInjector({
       host,
       cwd,
+      includeExtensions: includeGrokExtensions(pathOnly),
     });
     let mode = null; // null = undecided, "inject" | "passthrough"
 
@@ -165,10 +170,17 @@ export function grokPwaPlugin() {
       if (id !== `\0${GROK_OG_IDENTITY_ID}`) return;
       return `export const grokOgIdentity = ${JSON.stringify(snapshotOgIdentity(root))};`;
     },
-    transformIndexHtml(html) {
+    transformIndexHtml(html, ctx) {
+      let pathname = "/";
+      try {
+        pathname = new URL(ctx?.path ?? "/", "http://localhost").pathname;
+      } catch {
+        // Keep the default non-payment behavior for an invalid transform path.
+      }
       return injectGrokPwaHead(html, {
         host: process.env.VITE_PUBLIC_HOSTNAME ?? "",
         cwd: root,
+        includeExtensions: includeGrokExtensions(pathname),
       });
     },
     configureServer(server) {

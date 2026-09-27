@@ -111,9 +111,7 @@ export function publicAppHost(hostHeader) {
  * app — Envoy rewrites it to `*.vercel.app`.
  */
 export function resolvePublicHost(hostHeader) {
-  return (
-    publicAppHost(process.env?.VITE_PUBLIC_HOSTNAME) || publicAppHost(hostHeader)
-  );
+  return publicAppHost(process.env?.VITE_PUBLIC_HOSTNAME) || publicAppHost(hostHeader);
 }
 
 export function isInstallQuery(url) {
@@ -323,7 +321,10 @@ export function siteHasCustomCard(site = {}) {
  * Otherwise empty — caller emits the og.grok.me placeholder.
  */
 export function resolveOgCardAsset(site = {}, cwd = process.cwd()) {
-  return ogCardPublicPath(cwd) || (detectCustomOgCard(cwd, site) ? String(site.image ?? "").trim() || "/og.jpg" : "");
+  return (
+    ogCardPublicPath(cwd) ||
+    (detectCustomOgCard(cwd, site) ? String(site.image ?? "").trim() || "/og.jpg" : "")
+  );
 }
 
 /** Stamp `card=custom` when public/og.jpg or public/og.png is on disk. */
@@ -417,6 +418,7 @@ export function normalizeHeadContext(ctx = {}) {
     creator: ctx.creator ?? readXCreator(),
     creatorId: ctx.creatorId ?? readXCreatorId(),
     host: ctx.host ?? "",
+    includeExtensions: ctx.includeExtensions !== false,
     cwd,
     site,
   };
@@ -424,15 +426,20 @@ export function normalizeHeadContext(ctx = {}) {
 
 export function injectGrokPwaHead(html, ctx = {}) {
   if (typeof html !== "string") return html;
-  const { site, projectId, creator, creatorId, host, cwd } = normalizeHeadContext(ctx);
+  const { site, projectId, creator, creatorId, host, cwd, includeExtensions } =
+    normalizeHeadContext(ctx);
   const documentTitle = titleFromDocument(html);
-  const appName = resolveOgTitle(
-    site,
-    ctx.appName ?? DEFAULT_APP_NAME,
-    host,
-    documentTitle,
-  );
+  const appName = resolveOgTitle(site, ctx.appName ?? DEFAULT_APP_NAME, host, documentTitle);
   let next = stripShareMetaTags(html);
+  if (!includeExtensions) {
+    next = next
+      .replace(
+        /<script\b(?=[^>]*\bsrc=["']https:\/\/grok\.com\/grok-app-builder\/extensions\.js["'])[^>]*>\s*<\/script>/gi,
+        "",
+      )
+      .replace(/<meta\s+name=["']grok-project-id["'][^>]*>/gi, "")
+      .replace(/<meta\s+property=["']grok:app_id["'][^>]*>/gi, "");
+  }
 
   const missing = grokPwaHeadTags(appName)
     .filter(([key]) => {
@@ -447,12 +454,13 @@ export function injectGrokPwaHead(html, ctx = {}) {
     grokOgHeadTags({ host, appName, site, documentTitle, cwd }).join(""),
   );
 
-  if (!next.includes("/grok-app-builder/extensions.js")) {
+  if (includeExtensions && !next.includes("/grok-app-builder/extensions.js")) {
     missing.push(...grokExtensionsHeadTags(projectId));
-  } else if (projectId && !next.includes('name="grok-project-id"')) {
+  } else if (includeExtensions && projectId && !next.includes('name="grok-project-id"')) {
     missing.push(`<meta name="grok-project-id" content="${escapeHtml(projectId)}">`);
   }
   if (
+    includeExtensions &&
     projectId &&
     !next.includes('property="grok:app_id"') &&
     !next.includes("property='grok:app_id'")
@@ -496,6 +504,7 @@ export function createHeadInjector(ctx = {}) {
       creator: normalized.creator,
       creatorId: normalized.creatorId,
       host: normalized.host,
+      includeExtensions: normalized.includeExtensions,
       cwd: normalized.cwd,
       site: normalized.site,
     });
