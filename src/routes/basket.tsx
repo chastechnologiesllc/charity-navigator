@@ -32,8 +32,7 @@ function BasketPage() {
   const [phoneCountryCode, setPhoneCountryCode] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [expiryMonth, setExpiryMonth] = useState("");
-  const [expiryYear, setExpiryYear] = useState("");
+  const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [pin, setPin] = useState("");
   const [otp, setOtp] = useState("");
@@ -98,13 +97,15 @@ function BasketPage() {
     }
     setStarting(true);
     try {
+      const expiryDigits = expiry.replace(/\D/g, "");
+      const expiryMonth = expiryDigits.slice(0, 2);
+      const expiryYear = expiryDigits.slice(2);
       const card = await encryptCardDetails(
         { number: cardNumber, expiryMonth, expiryYear, cvv },
         config.encryptionKey,
       );
       setCardNumber("");
-      setExpiryMonth("");
-      setExpiryYear("");
+      setExpiry("");
       setCvv("");
       const result = await initiateFlutterwavePayment({
         data: {
@@ -433,30 +434,22 @@ function BasketPage() {
                     className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
                   />
                 </label>
-                <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="mt-4 grid grid-cols-2 gap-3">
                   <label className="block text-sm font-medium text-navy">
-                    Month
+                    Expiration date
                     <input
                       required
                       inputMode="numeric"
-                      autoComplete="cc-exp-month"
-                      value={expiryMonth}
-                      onChange={(event) => setExpiryMonth(event.target.value)}
-                      maxLength={2}
-                      placeholder="MM"
-                      className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
-                    />
-                  </label>
-                  <label className="block text-sm font-medium text-navy">
-                    Year
-                    <input
-                      required
-                      inputMode="numeric"
-                      autoComplete="cc-exp-year"
-                      value={expiryYear}
-                      onChange={(event) => setExpiryYear(event.target.value)}
-                      maxLength={4}
-                      placeholder="YY"
+                      autoComplete="cc-exp"
+                      value={expiry}
+                      onChange={(event) => {
+                        const digits = event.target.value.replace(/\D/g, "").slice(0, 4);
+                        setExpiry(
+                          digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits,
+                        );
+                      }}
+                      maxLength={5}
+                      placeholder="MM/YY"
                       className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
                     />
                   </label>
