@@ -19,6 +19,7 @@ function BasketPage() {
   const {
     items,
     remove,
+    update,
     clear,
     coverFees,
     setCoverFees,
@@ -192,24 +193,42 @@ function BasketPage() {
             {items.map((item) => {
               const charity = getCharity(item.slug);
               return (
-                <div
-                  key={item.slug}
-                  className="flex items-center justify-between rounded-xl border border-line bg-paper p-5"
-                >
-                  <div>
+                <div key={item.slug} className="rounded-xl border border-line bg-paper p-5">
+                  <div className="flex items-start justify-between gap-4">
                     <h2 className="font-semibold text-navy">{charity?.name ?? item.slug}</h2>
-                    <p className="mt-1 text-sm text-muted">
-                      ${item.amount.toFixed(2)} ·{" "}
-                      {item.frequency === "monthly" ? "monthly" : "one-time"}
-                    </p>
+                    <button
+                      type="button"
+                      onClick={() => remove(item.slug)}
+                      className="shrink-0 text-sm font-semibold text-primary hover:underline"
+                    >
+                      Remove
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => remove(item.slug)}
-                    className="text-sm font-semibold text-primary hover:underline"
-                  >
-                    Remove
-                  </button>
+                  <div className="mt-4 flex items-end gap-3">
+                    <label className="block max-w-48 flex-1 text-sm font-medium text-navy">
+                      Gift amount
+                      <div className="relative mt-1">
+                        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+                          $
+                        </span>
+                        <input
+                          type="number"
+                          min="1"
+                          max="100000"
+                          step="0.01"
+                          inputMode="decimal"
+                          value={item.amount}
+                          onChange={(event) => {
+                            const amount = Number(event.target.value);
+                            if (Number.isFinite(amount) && amount >= 1 && amount <= 100000)
+                              update(item.slug, { amount: Math.round(amount * 100) / 100 });
+                          }}
+                          className="h-11 w-full rounded-md border border-line bg-paper pl-7 pr-3 outline-none focus:border-primary"
+                        />
+                      </div>
+                    </label>
+                    <span className="pb-3 text-sm text-muted">one-time</span>
+                  </div>
                 </div>
               );
             })}
@@ -276,7 +295,18 @@ function BasketPage() {
                 className="mt-6 space-y-4"
                 onSubmit={(event) => void submitAuthorization(event)}
               >
-                <h2 className="font-semibold text-navy">Complete card authorization</h2>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                    Step 2 of 2
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl font-semibold text-navy">
+                    Confirm your billing address
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    Enter the address registered to this card. This helps your bank approve the
+                    payment.
+                  </p>
+                </div>
                 {authorizationKind === "pin" ? (
                   <label className="block text-sm font-medium text-navy">
                     Card PIN
@@ -308,26 +338,83 @@ function BasketPage() {
                   </label>
                 ) : null}
                 {authorizationKind === "avs" ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    {(["line1", "line2", "city", "state", "postal_code", "country"] as const).map(
-                      (field) => (
-                        <label
-                          key={field}
-                          className="block text-sm font-medium capitalize text-navy"
-                        >
-                          {field.replace("_", " ")}
-                          <input
-                            required={field !== "line2"}
-                            maxLength={field === "country" ? 2 : 120}
-                            value={address[field]}
-                            onChange={(event) =>
-                              setAddress((current) => ({ ...current, [field]: event.target.value }))
-                            }
-                            className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
-                          />
-                        </label>
-                      ),
-                    )}
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="block text-sm font-medium text-navy sm:col-span-2">
+                      Street address
+                      <input
+                        required
+                        autoComplete="address-line1"
+                        value={address.line1}
+                        onChange={(event) =>
+                          setAddress((current) => ({ ...current, line1: event.target.value }))
+                        }
+                        className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-navy sm:col-span-2">
+                      Apartment, suite, or unit{" "}
+                      <span className="font-normal text-muted">(optional)</span>
+                      <input
+                        autoComplete="address-line2"
+                        value={address.line2}
+                        onChange={(event) =>
+                          setAddress((current) => ({ ...current, line2: event.target.value }))
+                        }
+                        className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-navy">
+                      City
+                      <input
+                        required
+                        autoComplete="address-level2"
+                        value={address.city}
+                        onChange={(event) =>
+                          setAddress((current) => ({ ...current, city: event.target.value }))
+                        }
+                        className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-navy">
+                      State or region
+                      <input
+                        required
+                        autoComplete="address-level1"
+                        value={address.state}
+                        onChange={(event) =>
+                          setAddress((current) => ({ ...current, state: event.target.value }))
+                        }
+                        className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-navy">
+                      ZIP or postal code
+                      <input
+                        required
+                        autoComplete="postal-code"
+                        value={address.postal_code}
+                        onChange={(event) =>
+                          setAddress((current) => ({ ...current, postal_code: event.target.value }))
+                        }
+                        className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-navy">
+                      Country code
+                      <input
+                        required
+                        autoComplete="country"
+                        maxLength={2}
+                        value={address.country}
+                        onChange={(event) =>
+                          setAddress((current) => ({
+                            ...current,
+                            country: event.target.value.toUpperCase(),
+                          }))
+                        }
+                        className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 uppercase outline-none focus:border-primary"
+                      />
+                    </label>
                   </div>
                 ) : null}
                 <button
@@ -351,6 +438,14 @@ function BasketPage() {
               </form>
             ) : (
               <form className="mt-6" onSubmit={(event) => void startCheckout(event)}>
+                <div className="mb-4">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                    Step 1 of 2
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl font-semibold text-navy">
+                    Payment details
+                  </h2>
+                </div>
                 <label className="block text-sm font-medium text-navy">
                   Cardholder name <span className="font-normal text-muted">(optional)</span>
                   <input

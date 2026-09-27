@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import type { Charity } from "@/data/types";
-import { useBasket, type Frequency } from "@/lib/basket-store";
+import { useBasket } from "@/lib/basket-store";
 import { formatUsd } from "@/lib/utils";
 import { StarRating } from "./star-rating";
 
@@ -21,7 +21,6 @@ export function DonateDialog({
   const navigate = useNavigate();
   const [amount, setAmount] = useState(50);
   const [custom, setCustom] = useState("");
-  const [frequency, setFrequency] = useState<Frequency>("once");
 
   useEffect(() => {
     if (!open) return;
@@ -38,7 +37,7 @@ export function DonateDialog({
 
   function submit(goToBasket: boolean) {
     if (value < 1) return;
-    add({ slug: charity.slug, amount: value, frequency });
+    add({ slug: charity.slug, amount: value, frequency: "once" });
     onClose();
     if (goToBasket) void navigate({ to: "/basket" });
   }
@@ -65,7 +64,7 @@ export function DonateDialog({
         >
           <X size={20} />
         </button>
-        <p className="text-xs font-semibold uppercase tracking-wider text-primary">Giving Basket</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-primary">Make a gift</p>
         <h2 id="donate-title" className="mt-1 font-display text-2xl font-semibold text-navy">
           Donate to {charity.name}
         </h2>
@@ -105,25 +104,9 @@ export function DonateDialog({
             className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 text-base outline-none focus:border-primary"
           />
         </label>
-        <div className="mt-4 flex rounded-md border border-line p-1">
-          {(
-            [
-              ["once", "One-time"],
-              ["monthly", "Monthly"],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setFrequency(id)}
-              className={`h-9 flex-1 rounded-sm text-sm font-semibold ${
-                frequency === id ? "bg-navy text-paper" : "text-muted hover:text-navy"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <p className="mt-4 rounded-md bg-canvas px-3 py-2 text-sm text-muted">
+          One-time gift · USD
+        </p>
         <div className="mt-6 flex flex-col gap-2">
           <button
             type="button"
@@ -131,7 +114,7 @@ export function DonateDialog({
             onClick={() => submit(true)}
             className="h-11 rounded-md bg-primary text-sm font-semibold text-primary-fg hover:bg-primary-hover disabled:opacity-50"
           >
-            Add {formatUsd(value)} {frequency === "monthly" ? "/ month" : ""} to basket
+            Add {formatUsd(value)} to basket
           </button>
           <button
             type="button"

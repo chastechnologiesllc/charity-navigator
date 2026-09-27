@@ -49,19 +49,19 @@ function PaymentResultPage() {
           ? "We could not check the payment yet."
           : "We are confirming your payment.";
   const description = successful
-    ? "Flutterwave confirmed the payment details against the recorded donation. Your support helps a trusted organization continue its work."
+    ? "Your payment was confirmed against the recorded donation. Your support helps a trusted organization continue its work."
     : failed
       ? "No successful donation was recorded. You can try again from your Giving Basket or keep browsing charities."
       : status === "not_found"
         ? "This payment reference is missing or invalid. Return to your basket to start a new donation."
         : status === "unavailable"
           ? "The payment service is temporarily unavailable. Check again in a moment; do not retry the payment until its status is clear."
-          : "The payment may still be processing. We will only show a confirmation after Flutterwave verifies the amount, currency, reference, and final status.";
+          : "The payment may still be processing. We will only show a confirmation after the payment service verifies the amount and final status.";
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-        USD card donation · Flutterwave v4
+        Giving Basket · USD card donation
       </p>
       <h1 className="mt-3 font-display text-4xl font-semibold text-navy">{title}</h1>
       <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted">{description}</p>

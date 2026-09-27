@@ -53,7 +53,8 @@ function Home() {
             Search for Charities
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted">
-            Explore charities that match your passions, view their ratings, and support them with your donation.
+            Explore charities that match your passions, view their ratings, and support them with
+            your donation.
           </p>
           <div className="mx-auto mt-8 max-w-2xl">
             <div className="mb-3 inline-flex rounded-md border border-line bg-paper p-1">
@@ -101,6 +102,20 @@ function Home() {
                 <HorizonSearch />
               </div>
             )}
+          </div>
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              to="/discover"
+              className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-7 text-base font-semibold text-primary-fg hover:bg-primary-hover"
+            >
+              Donate now
+            </Link>
+            <Link
+              to="/discover"
+              className="inline-flex h-12 items-center justify-center rounded-md border border-line bg-paper px-7 text-base font-semibold text-navy hover:bg-canvas"
+            >
+              Explore charities
+            </Link>
           </div>
         </div>
       </section>
@@ -165,8 +180,8 @@ function Home() {
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted">
             You can use Charity Navigator to find and support thousands of charities that align with
-            your passions and values. We use data from the IRS, partners, and the charities themselves
-            to power our unbiased ratings so that you can give with confidence.
+            your passions and values. We use data from the IRS, partners, and the charities
+            themselves to power our unbiased ratings so that you can give with confidence.
           </p>
           <Link
             to="/about"
@@ -178,7 +193,9 @@ function Home() {
         <div className="grid grid-cols-2 gap-4">
           {STATS.map((s) => (
             <div key={s.label} className="rounded-xl border border-line bg-canvas px-5 py-6">
-              <p className="font-display text-3xl font-semibold text-navy tabular-nums">{s.value}</p>
+              <p className="font-display text-3xl font-semibold text-navy tabular-nums">
+                {s.value}
+              </p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted">
                 {s.label}
               </p>
@@ -191,7 +208,10 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
           <div className="mb-6 flex items-end justify-between">
             <h2 className="font-display text-3xl font-semibold">Donor Basics</h2>
-            <Link to="/donor-resources" className="text-sm font-semibold text-primary hover:underline">
+            <Link
+              to="/donor-resources"
+              className="text-sm font-semibold text-primary hover:underline"
+            >
               See more
             </Link>
           </div>

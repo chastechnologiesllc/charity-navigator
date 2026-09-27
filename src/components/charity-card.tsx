@@ -4,13 +4,7 @@ import type { Charity } from "@/data/types";
 import { StarRating } from "./star-rating";
 import { cn } from "@/lib/utils";
 
-export function CharityCard({
-  charity,
-  className,
-}: {
-  charity: Charity;
-  className?: string;
-}) {
+export function CharityCard({ charity, className }: { charity: Charity; className?: string }) {
   return (
     <article
       className={cn(
@@ -21,6 +15,7 @@ export function CharityCard({
       <Link
         to="/charity/$slug"
         params={{ slug: charity.slug }}
+        search={{ donate: undefined }}
         className="relative block aspect-16/9 overflow-hidden"
       >
         <img
@@ -40,6 +35,7 @@ export function CharityCard({
         <Link
           to="/charity/$slug"
           params={{ slug: charity.slug }}
+          search={{ donate: undefined }}
           className="font-display text-lg font-semibold leading-snug text-navy hover:text-primary"
         >
           {charity.name}
@@ -53,6 +49,7 @@ export function CharityCard({
           <Link
             to="/charity/$slug"
             params={{ slug: charity.slug }}
+            search={{ donate: undefined }}
             className="text-sm font-semibold text-primary hover:underline"
           >
             View rating

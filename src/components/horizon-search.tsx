@@ -63,6 +63,7 @@ export function HorizonSearch({ initialQuery = "" }: { initialQuery?: string }) 
                   <Link
                     to="/charity/$slug"
                     params={{ slug: c.slug }}
+                    search={{ donate: undefined }}
                     className="flex gap-4 rounded-lg border border-line bg-paper p-3 hover:border-primary"
                   >
                     <img

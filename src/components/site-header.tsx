@@ -10,7 +10,11 @@ const NAV = [
     href: "/discover",
     items: [
       { label: "Discover Charities", href: "/discover", hint: "Curated lists by cause and crisis" },
-      { label: "Highly Rated", href: "/lists/highly-rated", hint: "Perfect and near-perfect scores" },
+      {
+        label: "Highly Rated",
+        href: "/lists/highly-rated",
+        hint: "Perfect and near-perfect scores",
+      },
       { label: "Causeway Funds", href: "/discover", hint: "Analyst-curated giving portfolios" },
       { label: "Search all charities", href: "/search", hint: "Browse by name, EIN, or cause" },
     ],
@@ -111,9 +115,7 @@ export function SiteHeader() {
             ) : null}
           </Link>
           <Link
-            to="/charity/$slug"
-            params={{ slug: "charity-navigator" }}
-            search={{ donate: "1" }}
+            to="/discover"
             className="hidden h-10 items-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-fg hover:bg-primary-hover sm:inline-flex"
           >
             Donate
@@ -129,10 +131,7 @@ export function SiteHeader() {
         </div>
       </div>
       {searchOpen ? (
-        <form
-          onSubmit={onSearch}
-          className="border-t border-line bg-paper px-4 py-3 sm:px-6"
-        >
+        <form onSubmit={onSearch} className="border-t border-line bg-paper px-4 py-3 sm:px-6">
           <div className="mx-auto flex max-w-7xl gap-2">
             <input
               autoFocus
@@ -170,13 +169,11 @@ export function SiteHeader() {
             </div>
           ))}
           <Link
-            to="/charity/$slug"
-            params={{ slug: "charity-navigator" }}
-            search={{ donate: "1" }}
+            to="/discover"
             onClick={() => setOpen(false)}
             className="mt-2 flex h-11 items-center justify-center rounded-md bg-primary font-semibold text-primary-fg"
           >
-            Donate to Charity Navigator
+            Donate now
           </Link>
         </div>
       ) : null}
