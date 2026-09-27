@@ -114,12 +114,6 @@ export function SiteHeader() {
               </span>
             ) : null}
           </Link>
-          <Link
-            to="/discover"
-            className="hidden h-10 items-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-fg hover:bg-primary-hover sm:inline-flex"
-          >
-            Donate
-          </Link>
           <button
             type="button"
             className="inline-flex size-10 items-center justify-center rounded-md text-navy hover:bg-canvas lg:hidden"
@@ -168,13 +162,6 @@ export function SiteHeader() {
               ))}
             </div>
           ))}
-          <Link
-            to="/discover"
-            onClick={() => setOpen(false)}
-            className="mt-2 flex h-11 items-center justify-center rounded-md bg-primary font-semibold text-primary-fg"
-          >
-            Donate now
-          </Link>
         </div>
       ) : null}
     </header>

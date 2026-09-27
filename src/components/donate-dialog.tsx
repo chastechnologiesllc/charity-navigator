@@ -34,10 +34,11 @@ export function DonateDialog({
   if (!open) return null;
 
   const value = custom ? Number(custom) || 0 : amount;
+  const canSubmit = Number.isFinite(value) && value >= 1 && value <= 100000;
 
   function submit(goToBasket: boolean) {
-    if (value < 1) return;
-    add({ slug: charity.slug, amount: value, frequency: "once" });
+    if (!canSubmit) return;
+    add({ slug: charity.slug, amount: Math.round(value * 100) / 100, frequency: "once" });
     onClose();
     if (goToBasket) void navigate({ to: "/basket" });
   }
@@ -98,6 +99,8 @@ export function DonateDialog({
           <input
             type="number"
             min={1}
+            max={100000}
+            step="0.01"
             value={custom}
             onChange={(e) => setCustom(e.target.value)}
             placeholder="Enter amount"
@@ -107,22 +110,26 @@ export function DonateDialog({
         <p className="mt-4 rounded-md bg-canvas px-3 py-2 text-sm text-muted">
           One-time gift · USD
         </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
+          Want to support another organization too? Add this gift to your basket and browse more
+          charities, then pay for everything together.
+        </p>
         <div className="mt-6 flex flex-col gap-2">
           <button
             type="button"
-            disabled={value < 1}
+            disabled={!canSubmit}
             onClick={() => submit(true)}
             className="h-11 rounded-md bg-primary text-sm font-semibold text-primary-fg hover:bg-primary-hover disabled:opacity-50"
           >
-            Add {formatUsd(value, 2)} to basket
+            {canSubmit ? `Continue to payment · ${formatUsd(value, 2)}` : "Continue to payment"}
           </button>
           <button
             type="button"
-            disabled={value < 1}
+            disabled={!canSubmit}
             onClick={() => submit(false)}
             className="h-11 rounded-md border border-line text-sm font-semibold text-navy hover:bg-canvas disabled:opacity-50"
           >
-            Add and keep browsing
+            Add to basket &amp; browse more
           </button>
         </div>
       </div>

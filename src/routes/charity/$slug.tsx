@@ -71,7 +71,7 @@ function CharityDetailPage() {
                   onClick={() => setDonateOpen(true)}
                   className="inline-flex h-11 items-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-fg hover:bg-primary-hover"
                 >
-                  Donate to this charity
+                  Choose an amount
                 </button>
                 <a
                   href={charity.website}

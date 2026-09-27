@@ -73,18 +73,10 @@ function ListDetailPage() {
                 Turn compassion into action.
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-paper/75">
-                Choose a trusted organization below and build a USD card donation in your Giving
-                Basket.
+                Choose an organization below to select a gift amount. Add it to your basket to
+                continue to payment, or keep browsing to support more organizations.
               </p>
             </div>
-            <Link
-              to="/charity/$slug"
-              params={{ slug: charities[0].slug }}
-              search={{ donate: undefined }}
-              className="inline-flex h-11 shrink-0 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-fg hover:bg-primary-hover"
-            >
-              Donate now
-            </Link>
           </div>
         </section>
       ) : null}

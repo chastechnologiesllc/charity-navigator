@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search, Sparkles, ArrowRight } from "lucide-react";
-import { DISCOVER_LISTS, CAUSEWAY_LISTS } from "@/data/lists";
+import { DISCOVER_LISTS, CAUSEWAY_LISTS, listCharities } from "@/data/lists";
 import { ListCard } from "@/components/list-card";
+import { CharityCard } from "@/components/charity-card";
 import { HorizonSearch } from "@/components/horizon-search";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -31,6 +32,9 @@ const BASICS = [
     to: "/donor-resources",
   },
 ];
+
+const HOME_FEATURED_LIST = DISCOVER_LISTS.find((list) => list.slug === "immigrant-support");
+const HOME_FEATURED_CHARITIES = HOME_FEATURED_LIST ? listCharities(HOME_FEATURED_LIST) : [];
 
 function Home() {
   const navigate = useNavigate();
@@ -103,13 +107,7 @@ function Home() {
               </div>
             )}
           </div>
-          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              to="/discover"
-              className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-7 text-base font-semibold text-primary-fg hover:bg-primary-hover"
-            >
-              Donate now
-            </Link>
+          <div className="mt-6 flex justify-center">
             <Link
               to="/discover"
               className="inline-flex h-12 items-center justify-center rounded-md border border-line bg-paper px-7 text-base font-semibold text-navy hover:bg-canvas"
@@ -121,12 +119,40 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+        <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+              Where to give now
+            </p>
+            <h2 className="mt-1 font-display text-3xl font-semibold text-navy">
+              Immigrant Support in the United States
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+              These featured organizations are sorted from highest to lowest rating. Choose a gift
+              amount or add it to your basket and keep browsing.
+            </p>
+          </div>
+          <Link
+            to="/discover"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+          >
+            Browse all giving guides <ArrowRight size={14} />
+          </Link>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {HOME_FEATURED_CHARITIES.map((charity) => (
+            <CharityCard key={charity.slug} charity={charity} />
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
               Expertly curated
             </p>
-            <h2 className="mt-1 font-display text-3xl font-semibold">Discover Charities</h2>
+            <h2 className="mt-1 font-display text-3xl font-semibold">Curated giving guides</h2>
           </div>
           <Link
             to="/discover"

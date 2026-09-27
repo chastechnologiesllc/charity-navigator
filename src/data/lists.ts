@@ -194,7 +194,9 @@ export function getList(slug: string) {
 }
 
 export function listCharities(list: CharityList) {
-  return charitiesBySlugs(list.charitySlugs);
+  return charitiesBySlugs(list.charitySlugs).sort(
+    (a, b) => b.overall - a.overall || a.name.localeCompare(b.name),
+  );
 }
 
 export const DISCOVER_LISTS = LISTS.filter((l) => l.kind === "crisis");
