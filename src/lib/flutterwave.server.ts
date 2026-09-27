@@ -230,7 +230,7 @@ function publicError(error: unknown) {
       .replace(/https?:\/\/\S+/gi, "")
       .replace(/\b\d{12,19}\b/g, "[redacted]")
       .trim()
-      .slice(0, 180);
+      .slice(0, 320);
     const code = error.providerCode ? ` (${error.providerCode})` : "";
     return `Payment details were rejected${code}${reason ? `: ${reason}` : "."}`;
   }
