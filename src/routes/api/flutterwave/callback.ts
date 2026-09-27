@@ -7,8 +7,8 @@ export const Route = createFileRoute("/api/flutterwave/callback")({
       GET: async ({ request }) => {
         const url = new URL(request.url);
         const status = url.searchParams.get("status");
-        const reference = url.searchParams.get("tx_ref");
-        const transactionId = url.searchParams.get("transaction_id");
+        const reference = url.searchParams.get("reference") ?? url.searchParams.get("tx_ref");
+        const transactionId = url.searchParams.get("order_id") ?? url.searchParams.get("transaction_id");
         let result = "failed";
         if (status === "successful" && reference && transactionId) {
           const verified = await verifyFlutterwavePayment(transactionId, reference);
