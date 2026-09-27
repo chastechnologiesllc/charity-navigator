@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, BadgeCheck, MapPin, ShoppingBasket } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { StarRating } from "@/components/star-rating";
 import { getList, listCharities } from "@/data/lists";
 import { formatUsd } from "@/lib/utils";
 import { subtotal, useBasket } from "@/lib/basket-store";
@@ -268,6 +269,80 @@ function DonateLandingPage() {
         </div>
       </section>
 
+      <section
+        aria-labelledby="community-imagery-heading"
+        className="mx-auto max-w-7xl px-4 pb-4 sm:px-6 sm:pb-6"
+      >
+        <div className="mb-5 max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+            The human story
+          </p>
+          <h2
+            id="community-imagery-heading"
+            className="mt-1 font-display text-2xl font-semibold text-navy"
+          >
+            Support starts with people
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            These portraits are from the Centre for Homelessness Impact image library and are shown
+            with credit. They are illustrative only—not images of the featured charities’ programs
+            or service users, and no immigration status or personal history is implied.
+          </p>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <figure className="overflow-hidden rounded-xl border border-line bg-paper shadow-[var(--shadow-card)]">
+            <div className="aspect-3/2 overflow-hidden bg-canvas">
+              <img
+                src="/images/donate-family-chi.webp"
+                alt="A family of three standing together in a room."
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <figcaption className="p-4">
+              <p className="text-sm font-semibold text-navy">Family portrait</p>
+              <p className="mt-1 text-xs text-muted">
+                Photo credit:{" "}
+                <a
+                  href="https://chi.resourcespace.com/pages/view.php?ref=788"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-primary"
+                >
+                  Centre for Homelessness Impact / Amy Ryall
+                </a>
+              </p>
+            </figcaption>
+          </figure>
+          <figure className="overflow-hidden rounded-xl border border-line bg-paper shadow-[var(--shadow-card)]">
+            <div className="aspect-3/2 overflow-hidden bg-canvas">
+              <img
+                src="/images/donate-portrait-chi.webp"
+                alt="A woman in a blue embroidered outfit standing on a wooden bridge."
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <figcaption className="p-4">
+              <p className="text-sm font-semibold text-navy">Community portrait</p>
+              <p className="mt-1 text-xs text-muted">
+                Photo credit:{" "}
+                <a
+                  href="https://chi.resourcespace.com/pages/view.php?ref=776"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-primary"
+                >
+                  Centre for Homelessness Impact / Kamila Jarczak
+                </a>
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
       <section id="campaign-charities" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="mb-6 max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">
@@ -281,48 +356,62 @@ function DonateLandingPage() {
             organization above; you can review its mission before continuing.
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {charities.map((charity, index) => {
             const isSelected = selectedSlug === charity.slug;
             return (
               <article
                 key={charity.slug}
-                className={`flex h-full flex-col rounded-xl border bg-paper p-5 transition-colors ${
-                  isSelected ? "border-primary ring-1 ring-primary" : "border-line"
+                className={`group flex h-full flex-col overflow-hidden rounded-xl border bg-paper transition-shadow ${
+                  isSelected
+                    ? "border-primary ring-1 ring-primary shadow-[var(--shadow-card)]"
+                    : "border-line shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lift)]"
                 }`}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-                      {index === 0 ? "Highest rated" : charity.cause}
-                    </p>
-                    <h3 className="mt-1 font-display text-xl font-semibold text-navy">
-                      {charity.name}
-                    </h3>
-                    <p className="mt-1 flex items-center gap-1 text-sm text-muted">
-                      <MapPin size={14} /> {charity.city}, {charity.state}
-                    </p>
-                  </div>
-                  <div className="shrink-0 rounded-md bg-canvas px-3 py-2 text-right">
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-                      Rating
-                    </p>
-                    <p className="font-display text-xl font-semibold tabular-nums text-navy">
+                <div className="relative aspect-16/9 overflow-hidden">
+                  <img
+                    src={charity.photo}
+                    alt=""
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <span className="absolute left-3 top-3 rounded-sm bg-paper/95 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-navy">
+                    {index === 0 ? "Highest rated · " : ""}
+                    {charity.cause}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col gap-2 p-4">
+                  <div className="flex items-center gap-2">
+                    <StarRating score={charity.overall} size={14} />
+                    <span className="text-sm font-semibold tabular-nums text-navy">
                       {charity.overall}
                       <span className="text-xs font-medium text-muted">/100</span>
-                    </p>
+                    </span>
+                  </div>
+                  <h3 className="font-display text-lg font-semibold leading-snug text-navy">
+                    {charity.name}
+                  </h3>
+                  <p className="flex items-center gap-1 text-sm text-muted">
+                    <MapPin size={13} /> {charity.city}, {charity.state}
+                  </p>
+                  <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-ink/80">
+                    {charity.mission}
+                  </p>
+                  <div className="mt-auto flex items-center justify-between gap-3 pt-3">
+                    <span className="text-xs font-medium text-muted">One-time USD gift</span>
+                    <button
+                      type="button"
+                      onClick={() => chooseFromCard(charity.slug)}
+                      aria-label={
+                        isSelected ? `${charity.name} selected` : `Donate to ${charity.name}`
+                      }
+                      aria-pressed={isSelected}
+                      className="inline-flex h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-semibold text-primary-fg hover:bg-primary-hover"
+                    >
+                      {isSelected ? "Selected" : "Donate"}
+                      {!isSelected ? <ArrowRight size={15} /> : null}
+                    </button>
                   </div>
                 </div>
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-ink/80">{charity.mission}</p>
-                <button
-                  type="button"
-                  onClick={() => chooseFromCard(charity.slug)}
-                  aria-label={`Donate to ${charity.name}`}
-                  className="mt-5 inline-flex h-11 items-center justify-center gap-2 self-start rounded-md border border-line px-4 text-sm font-semibold text-navy hover:border-primary hover:text-primary"
-                >
-                  {isSelected ? "Selected" : "Donate"}
-                  {!isSelected ? <ArrowRight size={15} /> : null}
-                </button>
               </article>
             );
           })}

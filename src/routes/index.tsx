@@ -84,16 +84,17 @@ function Home() {
               </button>
             </div>
             {mode === "search" ? (
-              <form onSubmit={onSearch} className="flex flex-col gap-2 sm:flex-row">
+              <form onSubmit={onSearch} className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <input
+                  aria-label="Search charities by name, cause, city, or EIN"
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   placeholder="Search by name, cause, city, or EIN"
-                  className="h-14 flex-1 rounded-md border border-line bg-paper px-5 text-lg outline-none focus:border-primary"
+                  className="h-16 sm:flex-1 rounded-md border border-line bg-paper px-5 text-lg outline-none focus:border-primary"
                 />
                 <button
                   type="submit"
-                  className="h-14 rounded-md bg-primary px-7 text-base font-semibold text-primary-fg hover:bg-primary-hover"
+                  className="h-13 rounded-md bg-primary px-6 text-base font-semibold text-primary-fg hover:bg-primary-hover"
                 >
                   Search
                 </button>

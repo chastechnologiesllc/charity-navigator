@@ -61,7 +61,7 @@ function SearchPage() {
       </p>
 
       <form
-        className="mt-6 flex flex-col gap-2 sm:flex-row"
+        className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center"
         onSubmit={(e) => {
           e.preventDefault();
           const fd = new FormData(e.currentTarget);
@@ -69,20 +69,24 @@ function SearchPage() {
         }}
       >
         <input
+          aria-label="Search charities by name, cause, city, or EIN"
           name="q"
           defaultValue={q ?? ""}
           placeholder="Name, cause, city, or EIN"
-          className="h-12 flex-1 rounded-md border border-line bg-paper px-4 text-base outline-none focus:border-primary"
+          className="h-14 sm:flex-1 rounded-md border border-line bg-paper px-4 text-base outline-none focus:border-primary"
         />
         <button
           type="submit"
-          className="h-12 rounded-md bg-primary px-6 text-sm font-semibold text-primary-fg hover:bg-primary-hover"
+          className="h-11 rounded-md bg-primary px-5 text-sm font-semibold text-primary-fg hover:bg-primary-hover"
         >
           Search
         </button>
       </form>
 
-      <details className="mt-8 rounded-xl border border-line bg-canvas p-4" open={mode === "horizon"}>
+      <details
+        className="mt-8 rounded-xl border border-line bg-canvas p-4"
+        open={mode === "horizon"}
+      >
         <summary className="cursor-pointer font-display text-lg font-semibold text-navy">
           Ask Horizon for personalized recommendations
         </summary>
@@ -113,7 +117,10 @@ function SearchPage() {
             <FilterChip active={rating === "3"} onClick={() => patch({ rating: "3" })}>
               3 stars & up
             </FilterChip>
-            <FilterChip active={rating === "complete"} onClick={() => patch({ rating: "complete" })}>
+            <FilterChip
+              active={rating === "complete"}
+              onClick={() => patch({ rating: "complete" })}
+            >
               Complete profile
             </FilterChip>
           </FilterGroup>
@@ -128,7 +135,10 @@ function SearchPage() {
             ))}
           </FilterGroup>
           <FilterGroup label="Sort">
-            <FilterChip active={!sort || sort === "score"} onClick={() => patch({ sort: undefined })}>
+            <FilterChip
+              active={!sort || sort === "score"}
+              onClick={() => patch({ sort: undefined })}
+            >
               Highest rated
             </FilterChip>
             <FilterChip active={sort === "name"} onClick={() => patch({ sort: "name" })}>
