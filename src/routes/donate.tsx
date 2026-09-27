@@ -208,31 +208,32 @@ function DonateLandingPage() {
                 </div>
               </fieldset>
 
-              {customSelected ? (
-                <label
-                  htmlFor="campaign-custom-amount"
-                  className="block text-sm font-medium text-navy"
-                >
-                  Other amount
-                  <div className="relative mt-1.5">
-                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
-                      $
-                    </span>
-                    <input
-                      id="campaign-custom-amount"
-                      type="number"
-                      min="1"
-                      max="100000"
-                      step="0.01"
-                      inputMode="decimal"
-                      value={customAmount}
-                      onChange={(event) => setCustomAmount(event.target.value)}
-                      placeholder="0.00"
-                      className="h-11 w-full rounded-md border border-line bg-paper pl-7 pr-3 text-base outline-none focus:border-primary"
-                    />
-                  </div>
-                </label>
-              ) : null}
+              <label
+                htmlFor="campaign-custom-amount"
+                className="block text-sm font-medium text-navy"
+              >
+                Other amount
+                <div className="relative mt-1.5">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+                    $
+                  </span>
+                  <input
+                    id="campaign-custom-amount"
+                    type="number"
+                    min="1"
+                    max="100000"
+                    step="0.01"
+                    inputMode="decimal"
+                    value={customAmount}
+                    onChange={(event) => {
+                      setCustomAmount(event.target.value);
+                      setCustomSelected(true);
+                    }}
+                    placeholder="0.00"
+                    className="h-11 w-full rounded-md border border-line bg-paper pl-7 pr-3 text-base outline-none focus:border-primary"
+                  />
+                </div>
+              </label>
 
               <p className="text-xs text-muted">
                 One-time gift. You can choose another organization before checkout.
