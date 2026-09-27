@@ -29,8 +29,6 @@ function BasketPage() {
   } = useBasket();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [phoneCountryCode, setPhoneCountryCode] = useState("1");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
@@ -116,10 +114,6 @@ function BasketPage() {
           customer: {
             email,
             name,
-            phone: {
-              country_code: phoneCountryCode,
-              number: phoneNumber.replace(/\D/g, ""),
-            },
           },
           card,
         },
@@ -258,18 +252,6 @@ function BasketPage() {
           </section>
 
           <aside className="h-fit rounded-xl border border-line bg-paper p-6 shadow-[var(--shadow-card)]">
-            <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-                Secure checkout · Flutterwave v4
-              </p>
-              <p className="mt-1 font-semibold text-navy">
-                USD · Cards only · {config?.environment === "production" ? "Live" : "Test"} mode
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-muted">
-                Card details are encrypted in your browser before submission. The site server
-                receives encrypted values—not your card number or security code.
-              </p>
-            </div>
             <div className="mt-6 flex justify-between text-sm text-muted">
               <span>Subtotal</span>
               <span>${total.toFixed(2)}</span>
@@ -370,7 +352,7 @@ function BasketPage() {
             ) : (
               <form className="mt-6" onSubmit={(event) => void startCheckout(event)}>
                 <label className="block text-sm font-medium text-navy">
-                  Your name <span className="font-normal text-muted">(optional)</span>
+                  Cardholder name <span className="font-normal text-muted">(optional)</span>
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
@@ -391,36 +373,6 @@ function BasketPage() {
                     className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
                   />
                 </label>
-                <div className="mt-4 grid grid-cols-[5.5rem_1fr] gap-3">
-                  <label className="block text-sm font-medium text-navy">
-                    Dial code
-                    <input
-                      required
-                      inputMode="numeric"
-                      aria-label="Phone country calling code without plus sign"
-                      value={phoneCountryCode}
-                      onChange={(event) =>
-                        setPhoneCountryCode(event.target.value.replace(/\D/g, "").slice(0, 4))
-                      }
-                      placeholder="1"
-                      className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
-                    />
-                  </label>
-                  <label className="block text-sm font-medium text-navy">
-                    Mobile number
-                    <input
-                      required
-                      type="tel"
-                      inputMode="tel"
-                      autoComplete="tel-national"
-                      value={phoneNumber}
-                      onChange={(event) => setPhoneNumber(event.target.value)}
-                      maxLength={24}
-                      placeholder="555 123 4567"
-                      className="mt-1 h-11 w-full rounded-md border border-line bg-paper px-3 outline-none focus:border-primary"
-                    />
-                  </label>
-                </div>
                 <label className="mt-4 block text-sm font-medium text-navy">
                   Card number
                   <input
@@ -436,7 +388,7 @@ function BasketPage() {
                 </label>
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   <label className="block text-sm font-medium text-navy">
-                    Expiration date
+                    Expiry date
                     <input
                       required
                       inputMode="numeric"
@@ -454,7 +406,7 @@ function BasketPage() {
                     />
                   </label>
                   <label className="block text-sm font-medium text-navy">
-                    Security code
+                    CVV
                     <input
                       required
                       inputMode="numeric"
@@ -473,8 +425,7 @@ function BasketPage() {
                 ) : null}
                 {!loadingConfig && !config?.configured ? (
                   <p className="mt-4 rounded-md bg-amber-50 p-3 text-sm text-amber-900">
-                    Flutterwave v4 and the production payment database are not configured. Payments
-                    are disabled.
+                    Card payments are temporarily unavailable. Please try again later.
                   </p>
                 ) : null}
                 <button
@@ -492,10 +443,6 @@ function BasketPage() {
                     ? "Encrypting and starting payment…"
                     : `Donate $${grandTotal.toFixed(2)} by card`}
                 </button>
-                <p className="mt-3 text-center text-xs leading-relaxed text-muted">
-                  Your payment is processed by Flutterwave. Card data is encrypted before leaving
-                  your browser, and the site does not store your card number or security code.
-                </p>
               </form>
             )}
             {error && authorizationKind ? (

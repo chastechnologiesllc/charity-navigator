@@ -315,7 +315,6 @@ export async function createFlutterwavePayment(input: CheckoutInput): Promise<Pa
         customer: {
           email: input.customer.email.trim().toLowerCase(),
           name: customerName,
-          phone: input.customer.phone,
         },
         meta: {
           charity_slugs: input.items.map((item) => item.slug).join(","),

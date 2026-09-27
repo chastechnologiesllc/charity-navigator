@@ -26,10 +26,6 @@ const checkoutSchema = z.object({
   customer: z.object({
     email: z.string().trim().email().max(200),
     name: z.string().trim().max(120),
-    phone: z.object({
-      country_code: z.string().regex(/^\d{1,4}$/),
-      number: z.string().regex(/^\d{6,15}$/),
-    }),
   }),
   card: encryptedCardSchema,
 });
@@ -59,7 +55,7 @@ export type CheckoutInput = {
   coverFees: boolean;
   note: string;
   anonymous: boolean;
-  customer: { email: string; name: string; phone: { country_code: string; number: string } };
+  customer: { email: string; name: string };
   card: {
     nonce: string;
     encrypted_card_number: string;
