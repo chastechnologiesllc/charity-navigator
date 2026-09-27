@@ -166,6 +166,8 @@ async function v4Request<T>(
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
+      "X-Trace-Id": crypto.randomUUID(),
+      "X-Idempotency-Key": crypto.randomUUID(),
       ...(init.headers ?? {}),
     },
     signal: init.signal ?? AbortSignal.timeout(REQUEST_TIMEOUT_MS),
@@ -401,6 +403,10 @@ export async function verifyFlutterwavePayment(chargeId: string, reference: stri
 
   const response = await v4Request<V4Charge>(`/charges/${encodeURIComponent(chargeId)}`, {
     method: "GET",
+    headers: {
+      "X-Trace-Id": crypto.randomUUID(),
+      "X-Idempotency-Key": `verify-${reference}-${chargeId}`,
+    },
   });
   const charge = response.data;
   if (!charge || charge.id !== chargeId)
