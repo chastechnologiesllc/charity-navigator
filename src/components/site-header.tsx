@@ -114,6 +114,12 @@ export function SiteHeader() {
               </span>
             ) : null}
           </Link>
+          <Link
+            to="/donate"
+            className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-3 text-sm font-semibold text-primary-fg hover:bg-primary-hover sm:px-4"
+          >
+            Donate
+          </Link>
           <button
             type="button"
             className="inline-flex size-10 items-center justify-center rounded-md text-navy hover:bg-canvas lg:hidden"
