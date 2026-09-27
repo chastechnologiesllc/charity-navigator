@@ -4,7 +4,7 @@ The application uses Flutterwave's **v4 direct-charge orchestrator** for a singl
 
 **This direct card-entry flow increases the merchant's PCI DSS responsibilities** compared with a fully hosted checkout. Payment and result pages explicitly omit the platform-injected `https://grok.com/grok-app-builder/extensions.js` script because any third-party JavaScript on a card-entry document can access card fields before encryption. That exclusion is defense in depth, not PCI certification: the merchant must have its acquirer/qualified assessor confirm the correct PCI DSS scope and SAQ, secure the checkout origin, inventory and authorize every remaining script, establish script/change/tamper monitoring, and review CSP and deployment controls before accepting live card data.
 
-> **Important checkout change:** This flow is not Flutterwave Standard's v3 hosted payment-link flow. The donor enters card details on this site's checkout page. The public v4 docs reviewed for this integration document direct/orchestrator charge flows; ask Flutterwave support/account management if you require a hosted v4 checkout instead.
+> The donor enters card details on this site's checkout page. Flutterwave's public v4 docs reviewed for this integration document direct/orchestrator charge flows; ask Flutterwave support/account management if you require a hosted v4 checkout instead.
 
 ## Environment variables
 
@@ -20,7 +20,9 @@ Set these on the deployment platform, never in browser-prefixed variables and ne
 | `DATABASE_URL`       | Production Neon/Postgres connection string; payment is deliberately disabled without Neon                                                                                                                             |
 | `APP_URL`            | Final public HTTPS origin used for v4 charge returns, e.g. `https://charity-navigator-nu.vercel.app`                                                                                                                  |
 
-Do **not** configure the old v3 `FLW_SECRET_KEY` as a replacement for v4 client credentials. Do not expose `FLW_CLIENT_SECRET`, the access token, webhook secret, or database URL to the browser. The v4 encryption key is specifically used by the documented browser-side AES-GCM encryption and is returned only by a server function to the checkout.
+Configure only the environment variables listed above. Do not expose `FLW_CLIENT_SECRET`, the access token, webhook secret, or database URL to the browser. The v4 encryption key is specifically used by the documented browser-side AES-GCM encryption and is returned only by a server function to the checkout.
+
+Existing payment databases receive migration `0004_provider_transaction_id.sql`, which renames the historical provider transaction-ID column to the generic `provider_transaction_id` name without dropping or rewriting stored IDs. Deploy through the normal migration runner; do not edit migrations already applied to a database.
 
 ## Environments
 

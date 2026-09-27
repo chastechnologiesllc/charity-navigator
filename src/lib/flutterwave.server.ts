@@ -375,8 +375,7 @@ async function applyChargeStatus(reference: string, charge: V4Charge): Promise<b
   if (matches && chargeId) {
     await sql`
       update payment_intents
-      set status = 'successful', flutterwave_charge_id = ${chargeId},
-          flutterwave_transaction_id = ${chargeId}, updated_at = current_timestamp
+      set status = 'successful', flutterwave_charge_id = ${chargeId}, updated_at = current_timestamp
       where tx_ref = ${reference} and status <> 'successful'
     `;
     return true;
