@@ -297,8 +297,8 @@ export async function createFlutterwavePayment(input: CheckoutInput): Promise<Pa
     const nameParts = input.customer.name.trim().split(/\s+/).filter(Boolean);
     const customerName = {
       first: nameParts[0] ?? "Supporter",
-      middle: nameParts.length > 2 ? nameParts.slice(1, -1).join(" ") : "",
-      last: nameParts.length > 1 ? (nameParts.at(-1) ?? "") : "",
+      ...(nameParts.length > 2 ? { middle: nameParts.slice(1, -1).join(" ") } : {}),
+      ...(nameParts.length > 1 ? { last: nameParts.at(-1) ?? "" } : {}),
     };
     const response = await v4Request<V4Charge>("/orchestration/direct-charges", {
       method: "POST",
@@ -317,7 +317,10 @@ export async function createFlutterwavePayment(input: CheckoutInput): Promise<Pa
           name: customerName,
           phone: input.customer.phone,
         },
-        meta: { charity_slugs: input.items.map((item) => item.slug), anonymous: input.anonymous },
+        meta: {
+          charity_slugs: input.items.map((item) => item.slug).join(","),
+          anonymous: String(input.anonymous),
+        },
       }),
     });
     const charge = response.data;
