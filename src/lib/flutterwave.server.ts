@@ -39,11 +39,17 @@ type V4Charge = {
   };
 };
 
-type V4Response<T> = { status?: string; message?: string; data?: T; error?: { message?: string } };
+type V4Response<T> = {
+  status?: string;
+  message?: string;
+  data?: T;
+  error?: { type?: string; code?: string; message?: string };
+};
 
 class FlutterwaveApiError extends Error {
   constructor(
     readonly statusCode: number,
+    readonly providerCode: string | undefined,
     message: string,
   ) {
     super(message);
@@ -182,6 +188,7 @@ async function v4Request<T>(
     const message = body.error?.message ?? body.message;
     throw new FlutterwaveApiError(
       response.status,
+      body.error?.code,
       message
         ? `Flutterwave request failed (${response.status}): ${message}`
         : `Flutterwave request failed (${response.status}).`,
@@ -215,8 +222,18 @@ function toAction(data: V4Charge): ChargeAction {
 }
 
 function publicError(error: unknown) {
-  if (error instanceof Error && error.message.startsWith("Flutterwave request failed ("))
-    return "Flutterwave could not process this payment. Check your details or try again.";
+  if (error instanceof FlutterwaveApiError) {
+    if ([401, 403].includes(error.statusCode))
+      return "Payment service authorization failed. Please contact support.";
+    const reason = error.message
+      .replace(/^Flutterwave request failed \(\d+\):?\s*/i, "")
+      .replace(/https?:\/\/\S+/gi, "")
+      .replace(/\b\d{12,19}\b/g, "[redacted]")
+      .trim()
+      .slice(0, 180);
+    const code = error.providerCode ? ` (${error.providerCode})` : "";
+    return `Payment details were rejected${code}${reason ? `: ${reason}` : "."}`;
+  }
   return "Secure checkout is not available right now. Please try again later.";
 }
 
