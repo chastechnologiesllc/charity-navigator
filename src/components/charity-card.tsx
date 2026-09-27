@@ -60,7 +60,7 @@ export function CharityCard({ charity, className }: { charity: Charity; classNam
             search={{ donate: "1" }}
             className="inline-flex h-9 items-center rounded-md bg-primary px-3.5 text-sm font-semibold text-primary-fg hover:bg-primary-hover"
           >
-            Choose amount
+            Donate
           </Link>
         </div>
       </div>
